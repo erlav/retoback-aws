@@ -1,0 +1,41 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "id": "http://aws-node-rest-api-project-dev/scheme/v1/crearPersonRequest.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "required": [
+        "id",
+        "nombre",
+        "genero",
+        "altura"
+    ],
+    "properties": {
+        "id": {
+            "id": "#/properties/id",
+            "type": "number",
+            "title": "The id schema",
+            "description": "An explanation about the purpose of this instance."
+        },
+        "nombre": {
+            "id": "#/properties/nombre",
+            "type": "string",
+            "title": "The nombre schema",
+            "description": "An explanation about the purpose of this instance."
+        },
+        "genero": {
+            "id": "#/properties/genero",
+            "type": "string",
+            "title": "The genero schema",
+            "description": "An explanation about the purpose of this instance.",
+            "enum": ["M","F"]
+        },
+        "altura": {
+            "id": "#/properties/altura",
+            "type": "number",
+            "title": "The altura schema",
+            "description": "An explanation about the purpose of this instance."
+        }
+    },
+    "additionalProperties": false
+}

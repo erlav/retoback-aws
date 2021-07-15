@@ -1,0 +1,110 @@
+org: erlavado
+app: retoback-app
+service: aws-node-rest-api-project
+
+frameworkVersion: '2'
+
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: '20201221'
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+          Resource:
+            - Fn::GetAtt: [ PersonTable, Arn ]
+  environment:
+    PERSON_TABLE: ${self:custom.personTable}
+custom:
+  personTable: 'retoback1-${self:provider.stage}'
+  documentation:
+    api:
+      info:
+          version: 1.0.0
+          title: TATA - RetoBack
+          termsOfService: 'http://swagger.io/terms/'
+          contact:
+            email: erlavado@gmail.com
+          license:
+            name: Apache 2.0
+            url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    models:
+    -
+      name: CrearPersonaRequest
+      description: "Request of crearPersona function"
+      contentType: "application/json"
+      schema: ${file(models/crearPersonaRequest.json)}
+    - 
+      name: CrearPersonaResponse
+      description: "Response of crearPersona function"
+      contentType: "application/json"
+      schema: ${file(models/crearPersonaResponse.json)}
+    - 
+      name: CrearPersonaResponse400
+      description: "Response of crearPersona function"
+      contentType: "application/json"
+      schema: ${file(models/crearPersonaResponse400.json)}
+plugins:
+  - serverless-aws-documentation
+functions:
+  crearPersona:
+    handler: handler.crearPersona
+    events:
+    - 
+      http:
+        path: /persona/
+        method: post
+        documentation:
+          summary: Registra una nueva persona
+          requestModels:
+            "application/json": CrearPersonaRequest
+          methodResponses:
+          -
+            statusCode: '200'
+            responseModels:
+              "application/json": CrearPersonaResponse
+          -
+            statusCode: '400'
+            responseModels:
+              "application/json": CrearPersonaResponse400
+  obtenerPersona:
+    handler: handler.obtenerPersona
+    events:
+    - 
+      http:
+        path: /persona/{id}
+        method: get
+        documentation:
+          summary: Obtiene una persona por su {id}
+          pathParams:
+          -
+            name: "id"
+            description: "ID de la persona"
+            required: true
+          methodResponses:
+          - 
+            statusCode: '200'
+            responseModels:
+              "application/json": CrearPersonaRequest
+resources:
+  Resources:
+    PersonTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.personTable}

@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "id": "http://aws-node-rest-api-project-dev/scheme/v1/crearPersonResponse.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "required": [
+        "new_id"
+    ],
+    "properties": {
+        "new_id": {
+            "id": "#/properties/new_id",
+            "type": "integer",
+            "title": "The new_id schema",
+            "description": "An explanation about the purpose of this instance."
+        }
+    },
+    "additionalProperties": false
+}
